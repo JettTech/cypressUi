@@ -1,0 +1,21 @@
+{
+  "name": "personas-profiles",
+  "version": "0.1.6",
+  "description": "A Holochain app (hApp) for managing your personal private information.",
+  "scripts": {
+    "hc:start": "mkdir -p tmp-storage && holochain -c ./conductor-config.toml",
+    "ui:start:agent1" : "cd ui-src && npm run ui:start:agent1",
+    "prerelease": "rm -rf ./release && cd ui-src && npm run clean && npm run build && cd .. && npm run hc:test && npm run hc:build && mkdir -p ./release && mv ./ui ./release/ui && mv ./dna ./release/dna && cp ./my-conductor-config.toml ./release/my-conductor-config.toml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://willemolding@github.com/holochain/holochain-ui.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/holochain/holochain-ui/issues"
+  },
+  "homepage": "https://github.com/holochain/holochain-ui#readme",
+  "dependencies": {
+  }
+}
