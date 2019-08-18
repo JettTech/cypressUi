@@ -1,0 +1,237 @@
+// import * as React from 'react'
+// import { withStyles, Theme, StyleRulesCallback } from '@material-ui/core/styles'
+// import withRoot from '../../../../withRoot'
+// import { withRouter, RouteComponentProps } from 'react-router-dom'
+// import Paper from '@material-ui/core/Paper'
+// import Button from '@material-ui/core/Button'
+// import Typography from '@material-ui/core/Typography'
+// import TextField from '@material-ui/core/TextField'
+// import PersonAdd from '@material-ui/icons/PersonAdd'
+// import PersonOutline from '@material-ui/icons/PersonOutline'
+// import TextFields from '@material-ui/icons/TextFields'
+// import CircularProgress from '@material-ui/core/CircularProgress'
+// import Dialog from '@material-ui/core/Dialog'
+// import DialogActions from '@material-ui/core/DialogActions'
+// import DialogContent from '@material-ui/core/DialogContent'
+// import DialogContentText from '@material-ui/core/DialogContentText'
+// import DialogTitle from '@material-ui/core/DialogTitle'
+// // import { GetPersonas } from '../../actions' // *Should have a getAllAgents, but for now do getALlKeys
+// import { AgentField, AgentList as AgentListType, AgentSpec } from '../types/deepkey
+
+// const styles: StyleRulesCallback = (theme: Theme) => ({
+//     root: {
+//       textAlign: 'left',
+//       paddingTop: theme.spacing.unit
+//     },
+//     button: {
+//       marginRight: theme.spacing.unit,
+//       marginTop: theme.spacing.unit
+//     },
+//     paper: {
+//       padding: theme.spacing.unit
+//     }
+//   }) 
+
+// export interface RouterProps extends RouteComponentProps<{name: string}> {}
+// export interface OwnProps {
+//   classes?: any
+// }
+// export interface StateProps {
+//   currentPersona: AgentListType,
+//   title: string,
+//   personas: Array<AgentListType>
+// }
+// export interface DispatchProps {
+//   create: (personaSpec: AgentSpec, personaFields: Array<AgentField>) => Promise<any>,
+//   update: (personaAddress: string, personaSpec: AgentSpec, personaFields: Array<AgentField>) => Promise<any>,
+//   delete: (personaAddress: string) => Promise<any>,
+// //   getPersonas: typeof GetPersonas.sig
+// }
+// export type Props = OwnProps & StateProps & DispatchProps
+
+// export interface State {
+//   persona: AgentListType,
+//   open: boolean
+// }
+
+// ///////////
+// function AgentField (props: {index: number, field: AgentField, onChange: (updatedField: AgentField) => void}) {
+//   const onChangeName = (newName: string): void => {
+//     props.onChange({
+//       ...props.field,
+//       name: newName
+//     })
+//   }
+//   const onChangeData = (newData: string): void => {
+//     props.onChange({
+//       ...props.field,
+//       data: newData
+//     })
+//   }
+//   return (
+//     <div>
+//       <TextField name={`fieldName${props.index}`} label='Field Name' value={props.field.name} onChange={(e) => onChangeName(e.target.value)} />
+//       <TextField name={`fieldValue${props.index}`} label='Field Value' value={props.field.data} onChange={(e) => onChangeData(e.target.value)} />
+//     </div>
+//   )
+// }
+// ///////////////
+
+// class DeepKeyAgent extends React.Component<Props & RouterProps, State> {
+//   constructor (props: Props & RouterProps) {
+//     super(props)
+//     this.state = {
+//       open: false,
+//       agent: {
+//         name: '',
+//         id: '',
+//         fields: []
+//       }
+//     }
+//   }
+
+//   handleSubmit = () => {
+//     const personaSpec: AgentSpec = { 'name': this.state.persona.name }
+//     const personaFields: Array<AgentField> = this.state.persona.fields
+//     if (this.state.persona.hash === '') {
+//       this.props.create(personaSpec, personaFields)
+//         .then(this.props.getPersonas)
+//         .catch(err => console.log(err))
+//     } else {
+//       this.props.update(this.state.persona.hash, personaSpec, personaFields)
+//         .then(this.props.getPersonas)
+//         .catch(err => console.error(err))
+//     }
+//     this.props.history.push('/personas')
+//   }
+
+//   handleConfirmDelete = () => {
+//     this.setState({
+//       open: true
+//     })
+//   }
+
+//   handleDelete = () => {
+//     this.setState({
+//       open: false
+//     })
+//     this.props.delete(this.state.persona.hash)
+//       .then(this.props.getPersonas)
+//       .catch(err => console.error(err))
+//     this.props.history.push('/personas')
+//   }
+
+//   handleCloseDialog = () => {
+//     this.setState({
+//       open: false
+//     })
+//   }
+
+//   handleAddPersonaField = () => {
+//     this.setState({
+//       persona: {
+//         ...this.state.persona,
+//         fields: [...this.state.persona.fields, { 'name': '', 'data': '' }]
+//       }
+//     })
+//   }
+
+//   componentDidMount () {
+//     this.props.getPersonas({})
+//       .catch((err) => console.log(err))
+//     this.setState({
+//       open: false,
+//       persona: this.props.currentPersona
+//     })
+//   }
+
+//   static getDerivedStateFromProps (nextProps: Props & RouterProps, prevState: State) {
+//     if (!prevState.persona) {
+//       return {
+//         persona: nextProps.currentPersona
+//       }
+//     } else {
+//       return null
+//     }
+//   }
+
+//   updateField (newField: AgentField, index: number) {
+//     const fields = this.state.persona.fields
+//     this.setState({
+//       persona: {
+//         ...this.state.persona,
+//         fields: [...fields.slice(0, index), newField, ...fields.slice(index + 1)]
+//       }
+//     })
+//   }
+
+//   updateName (newName: string) {
+//     this.setState({
+//       persona: {
+//         ...this.state.persona,
+//         name: newName
+//       }
+//     })
+//   }
+
+//   render () {
+//     const { classes } = this.props
+
+//     if (!this.state.persona) {
+//       return (
+//         <div>
+//           <CircularProgress/>
+//         </div>
+//       )
+//     }
+
+//     return (
+//       <div className={classes.root}>
+//         <Paper className={classes.paper}>
+//           <Typography variant='h4'>
+//             Manage Your DeepKey Agent
+//           </Typography>
+//           <Typography variant='body1' gutterBottom={true}>
+//             You can add a new Holochain Agent. DeepKey will manage and generate your new Agent Key Pairs.
+//           </Typography>
+//             <div>
+//               <TextField name='agentId' value={this.state.agent.name} onChange={e => this.updateName(e.target.value)} label='Agent ID'/>
+//               <TextField name='agentName' value={this.state.agent.id} onChange={e => this.updateName(e.target.value)} label='Agent Name'/>
+//             </div>
+
+//             {this.state.persona.fields.map((field: AgentField, index: number) => (<AgentField key={index} index={index} field={field} onChange={(newField: AgentField) => this.updateField(newField, index)}/>))}
+//             <Button name='submitPersona' color='primary' onClick={() => this.handleSubmit()}>
+//               <PersonAdd/>
+//               Update Persona
+//             </Button>
+
+//             <Button name='deletePersona' color='primary' onClick={() => this.handleConfirmDelete()}>
+//               <PersonOutline/>
+//               Delete Persona
+//             </Button>
+//             <Dialog open={this.state.open} onClose={this.handleCloseDialog}>
+//               <DialogTitle id='alert-dialog-slide-title'>
+//                 Delete {this.state.agent.name} Agent?
+//               </DialogTitle>
+//               <DialogContent>
+//                 <DialogContentText>
+//                   Agreeing will delete this Agent.
+//                 </DialogContentText>
+//               </DialogContent>
+//               <DialogActions>
+//                 <Button onClick={this.handleCloseDialog} color='primary'>
+//                   Cancel
+//                 </Button>
+//                 <Button id='Agree' onClick={this.handleDelete} color='primary'>
+//                   Delete
+//                 </Button>
+//               </DialogActions>
+//             </Dialog>
+//           </Paper>
+//       </div>
+//     )
+//   }
+// }
+
+// export { DeepKeyAgent as DeepKeyAgentBase }
+// export default withRoot(withStyles(styles)(withRouter(DeepKeyAgent)))

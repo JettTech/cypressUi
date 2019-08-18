@@ -1,11 +1,12 @@
+admin = true
 bridges = []
 persistence_dir = "./tmp/persistence-deepkey"
 
-# [[agents]]
-#  id = "test_agent1"
-#  name = "Agent 1"
-#  public_address = "HcSCJbpm8CZparb6f5iEKKRv4Te4op93q6ESMRuDtwp9abbzV8zYTF7EKqqw9ei"
-#  keystore_file = "./agent1.keystore"
+[[agents]]
+ id = "test_agent1"
+ name = "Agent 1"
+ public_address = "HcSCJbpm8CZparb6f5iEKKRv4Te4op93q6ESMRuDtwp9abbzV8zYTF7EKqqw9ei"
+ keystore_file = "./agent1.keystore"
 
 [[agents]]
   id = "test_agent2"
@@ -13,32 +14,32 @@ persistence_dir = "./tmp/persistence-deepkey"
   public_address = "HcSciScdx7wkdeuft7qmvRnYx53rk9nbayCK7IS9JA6s8sxr6qBOWb3KpO5vypi"
   keystore_file = "/home/lisa/.config/holochain/keys/HcSciScdx7wkdeuft7qmvRnYx53rk9nbayCK7IS9JA6s8sxr6qBOWb3KpO5vypi"
 
-# [[dnas]]
-  # id = "personas_profiles"
-  # file = "/home/lisa/Documents/gitrepos/holochain/personas-profiles/dna/personas-profiles.dna.json"
-  # hash = "QmVjrWf3mqULnk4SVwP7k9StFXWz9egpss6qEcCtVMi3FY"
+[[dnas]]
+  id = "personas_profiles"
+  file = "/home/lisa/Documents/gitrepos/holochain/personas-profiles/personas-profiles/dna-src/dist/dna-src.dna.json"
+  hash = "QmQtY4pKFS4j9y9Hh9WnBHezgy4P5QrzbbARubpLcoD5sE"
 
 [[dnas]]
   id = "deepkey"
-  file = "./DeepKey.dna.json"
-  hash = "QmZMuuXQSLJhsjsz8TRSHV9U4HJxBHcbMqc4TzoS56qTYV"
+  file = "/home/lisa/Documents/gitrepos/holochain/deepKey/DeepKey/dist/DeepKey.dna.json"
+  # file = "/deepKey-dna/dist/DeepKey.dna.json"
+  hash = "QmWziNHrDrNhXvDrRHjo1pUHPojk6YYsvYZXAxZLv3x12o"
 
-# [[instances]]
-#  id = "personas-profiles"
-#  dna = "personas_profiles"
-#  agent = "test_agent2"
-# [instances.logger]
-#  type = "simple"
-#  file = "app_spec.log"
-# [instances.storage]
- # type = "memory"
- # path = "tmp-storage"
+[[instances]]
+ id = "personas-profiles"
+ dna = "personas_profiles"
+ agent = "test_agent2"
+[instances.logger]
+ type = "simple"
+ file = "app_spec.log"
+[instances.storage]
+ type = "memory"
+ path = "tmp-storage"
 
 [[instances]]
   id = "dpki_happ"
   dna = "deepkey"
   agent = "test_agent2"
-  # address of instance in DPKI : 'QmdDHAjd59FzLJz28ZYh8s7wKN99mwJjvQ9wE6pxPjEWti'
 [instances.logger]
   type = "simple"
   file = "app_spec.log"
@@ -46,38 +47,18 @@ persistence_dir = "./tmp/persistence-deepkey"
   type = "memory"
   path = "tmp-storage"
 
-
 [[interfaces]]
   id = "websocket_interface"
 [interfaces.driver]
   type = "websocket"
   port = 5401
 
-# [[interfaces.instances]]
-#  id = "personas-profiles"
+[[interfaces.instances]]
+ id = "personas-profiles"
+
+[[interfaces.instances]]
+ id = "dpki_happ"
 
 [dpki]
   instance_id = "dpki_happ"
   init_params = "{\"revocation_key\": \"HcScIXuxtWI6ttc5gngvQTsDnHtynb5dzyDujh37mNo43nf7ZRB5UZKmR9953pa\"}"
-
-# -----------  UI  -----------
-
-# [[ui_bundles]]
-#   id = "main"
-#   root_dir = "./ui"
-#   hash = "Qm000"
-#
-# [[ui_interfaces]]
-#   id = "ui-interface"
-#   bundle = "main"
-#   port = 3000
-#   dna_interface = "websocket_interface"
-
-# -----------  Networking  -----------
-#
-# [network]
-# type = "n3h"
-# n3h_mode = "REAL"
-# n3h_persistence_path = "./n3h-agent1"
-# n3h_log_level = "i"
-# bootstrap_nodes = []

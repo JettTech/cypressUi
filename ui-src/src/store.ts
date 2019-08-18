@@ -18,38 +18,10 @@ if (REACT_APP_CHAT_WEBSOCKET_INTERFACE) {
   middleware = [holochainMiddleware(connect())]
 }
 
-const asyncDispatchMiddleware = (store: any) => (next: any) => (action: any) => {
-  let syncActivityFinished = false
-  let actionQueue: Array<any> = []
-
-  function flushQueue () {
-    actionQueue.forEach(a => store.dispatch(a)) // flush queue
-    actionQueue = []
-  }
-
-  function asyncDispatch (asyncAction: any) {
-    actionQueue = actionQueue.concat([asyncAction])
-
-    if (syncActivityFinished) {
-      flushQueue()
-    }
-  }
-
-  const actionWithAsyncDispatch =
-      Object.assign({}, action, { asyncDispatch })
-
-  next(actionWithAsyncDispatch)
-  syncActivityFinished = true
-  flushQueue()
-}
-
 // @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 function CreateStore () {
-
-  middleware.push(asyncDispatchMiddleware)
-
   return createStore(
   	rootReducer,
   	composeEnhancers(

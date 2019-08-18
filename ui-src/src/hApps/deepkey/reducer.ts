@@ -8,7 +8,7 @@ export type DeepKeyAction = ActionType<typeof deepKeyAction>
 export type DeepKeyState = {
   readonly isInitialized: false,
   readonly revocationRuleSet: undefined,
-  readonly authorizorKeySet: undefined,
+  readonly authorizerKeySet: undefined,
   readonly allKeys: []
 }
 
@@ -17,7 +17,7 @@ export type State = DeepKeyState
 export const initialState: State = {
   isInitialized: false,
   revocationRuleSet: undefined,
-  authorizorKeySet: undefined,
+  authorizerKeySet: undefined,
   allKeys: []
 }
 
@@ -37,11 +37,11 @@ export function keyReducer (state: DeepKeyState = initialState, action: DeepKeyA
         revocationRuleSet: action.payload[0].entry
       }
 
-    case getType(deepKeyAction.GetAuthorizor.success):
-      console.log('get authorizor : ', action.payload)
+    case getType(deepKeyAction.GetAuthorizer.success):
+      console.log('get Authorizer : ', action.payload)
       return {
         ...state,
-        authorizorKeySet: action.payload[0].entry
+        AuthorizerKeySet: action.payload[0].entry
       }
 
     case getType(deepKeyAction.GetAllKeys.success):

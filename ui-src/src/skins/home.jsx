@@ -24,7 +24,7 @@ const styles = theme => ({
 
 class MiniDrawer extends React.Component {
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme } = this.props
 
     return (
       <div className={classes.root}>
@@ -37,13 +37,13 @@ class MiniDrawer extends React.Component {
           <Route path='/personas' title='Personas' component={PersonasContainer} />
           <Route path='/persona/:name' component={PersonaContainer} />
           <Route path='/profiles' component={ProfilesContainer} />
-          <Route exact path='/profile/:hash' render={ props =>
+          <Route exact path='/profile/:hash' render={props =>
             <ProfileContainer {...props} />
           } />
-          <Route exact path='/profile/:hash/:returnUrl' render={ props =>
+          <Route exact path='/profile/:hash/:returnUrl' render={props =>
             <ProfileContainer {...props} />
           } />
-          <Route exact path='/deepkey/:keyType' render={ props =>
+          <Route exact path='/deepkey/addagent' render={props =>
             <DeepKeyContainer {...props} />
           } />
           <Route exact path='/' render={ props =>
@@ -62,7 +62,7 @@ class MiniDrawer extends React.Component {
           </MediaQuery>
         </main>
       </div>
-    );
+    )
   }
 }
 
@@ -71,4 +71,4 @@ MiniDrawer.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(MiniDrawer);
+export default withStyles(styles, { withTheme: true })(MiniDrawer)

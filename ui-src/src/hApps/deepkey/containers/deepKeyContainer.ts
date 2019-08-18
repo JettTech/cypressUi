@@ -1,14 +1,17 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Key } from '../types/deepKey'
+import { KeyParams, RevParams, AuthParams } from '../types/deepKey' // Agent,
 import DeepKeyOverview, { StateProps, DispatchProps } from '../components/deepKey/deepKeyOverview'
 import {
 	IsInitialized,
-	GetRevocationRules,
-	GetAuthorizor,
+  GetRevocationRules,
+  UpdateRevocationRules,
+  SetAuthorizer,
+	GetAuthorizer,
 	GetAllKeys,
 	UpdateKey,
-	DeleteKey
+  DeleteKey // ,
+  // CreateAgent,
 } from '../../deepkey/actions'
 
 // const mapStateToProps = ({ isInitialized, revocationKey, allKeys }: { isInitialized:boolean, revocationKey:string, allKeys:any }): StateProps => ({  isInitialized, revocationKey, allKeys })
@@ -16,18 +19,25 @@ const mapStateToProps = (state: any): StateProps => {
   return {
     isInitialized: state.deepKey.deepkey.isInitialized,
     revocationRuleSet: state.deepKey.deepkey.revocationRuleSet,
-    authorizorKeySet: state.deepKey.deepkey.authorizorKeySet,
+    authorizerKeySet: state.deepKey.deepkey.AuthorizerKeySet,
     allKeys: state.deepKey.deepkey.allKeys
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+  // DeepKey DNA Calls:
   fetchIsInitialized: () => dispatch(IsInitialized.create({})),
   fetchRevocationRules: () => dispatch(GetRevocationRules.create({})),
-  fetchAuthorizor: () => dispatch(GetAuthorizor.create({})),
+  updateRevocationRules: (args: RevParams) => dispatch(UpdateRevocationRules.create(args)),
+  setAuthorizer: (args: AuthParams) => dispatch(SetAuthorizer.create(args)),
+  fetchAuthorizer: () => dispatch(GetAuthorizer.create({})),
   fetchAllKeys: () => dispatch(GetAllKeys.create({})),
-  updateKey: (key: Key) => dispatch(UpdateKey.create({ old_key: key.address, signed_old_key: 'agent.hash ??', context: 'unknown' })),
-  deleteKey: (key: Key) => dispatch(DeleteKey.create({ old_key: key.address, signed_old_key: 'agent.hash ??' }))
+  updateKey: (args: KeyParams) => dispatch(UpdateKey.create(args)),
+  deleteKey: (args: KeyParams) => dispatch(DeleteKey.create(args))
+  // Admin Call:
+  // createAgent; args = {id, name}
+  // eg: {id :"test_agent1", name : "Agent 1"}
+	// createAgent:(args: Agent) => dispatch(CreateAgent(args))
 })
 
 export default connect(

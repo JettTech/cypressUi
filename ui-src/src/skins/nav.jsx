@@ -19,6 +19,7 @@ import ProfileContainer from '../hApps/holo-vault/containers/profileContainer'
 import ProfilesContainer from '../hApps/holo-vault/containers/profilesContainer'
 import LoginContainer from '../hApps/holo-vault/containers/loginContainer'
 import DeepKeyContainer from '../hApps/deepkey/containers/deepKeyContainer'
+// import DeepKeyAgentContainer from '../hApps/deepkey/containers/deepKeyAgentContainer'
 const drawerWidth = 180
 
 const styles = theme => ({
@@ -94,6 +95,12 @@ class Navigation extends React.Component {
                 </ListItemIcon>
                 <ListItemText primary='Profiles' />
               </ListItem>
+              <ListItem button onClick={() => { this.handleClickListItem(history,'/deepkey') }}>
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText primary='DeepKey' />
+              </ListItem>
             </div>
           )} />
       </List>
@@ -143,7 +150,7 @@ class Navigation extends React.Component {
           <Route exact path='/profile/:hash/:returnUrl' render={ props =>
             <ProfileContainer {...props} />
           } />
-          <Route exact path='/deepkey/:keyType' title='DeepKey' render={ props =>
+          <Route exact path='/deepkey/addagent' title='DeepKey Agent' render={ props =>
             <DeepKeyContainer {...props} />
           } />
           <Route exact path='/' render={ props =>

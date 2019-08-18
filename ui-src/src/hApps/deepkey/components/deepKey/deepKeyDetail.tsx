@@ -9,11 +9,11 @@ import withRoot from '../../../../withRoot'
 
 const styles: StyleRulesCallback = (theme: Theme) => ({
   card: {
-    maxWidth: 300
+    minWidth: 300
   },
   media: {
     height: 0,
-    paddingTop: '56.25%' // 16:9
+    paddingTop: '56.25%'
   },
   actions: {
     display: 'flex'
@@ -24,19 +24,63 @@ const styles: StyleRulesCallback = (theme: Theme) => ({
   }
 })
 
-function DeepKeyDetail ({ classes, address, keyType }: { classes: any, address: string; keyType: string }) {
+function DeepKeyDetail (props: any) {
+  const { currentKey, classes, keyType, address, updateKey } = props
+
+  // const currentKeyProps = revocationRuleSetProp || authorizerKeySetProp || agentKeyProps
+  const displayProp = (text: string) => {
+    const transformedText = text.replace(/([A-Z])/g, ' $1').trim()
+    const capFirstLetter = transformedText[0].toUpperCase()
+    const newString = capFirstLetter + transformedText.substr(1)
+    return newString
+  }
+
+  const makeZomeCall = (action: string, params?: any) => {
+    const actionCall = props[action]
+    actionCall(params)
+      .catch((reason: any) => { console.log('HC ZOMECALL ERROR = action, result : ', action, JSON.stringify(reason)) })
+  }
+
+  const updateCurrentKey = () => {
+    if (keyType === 'revocationKey') {
+      makeZomeCall('updateRevocationRules', { revocation_key: address, signed_old_revocation_key: currentKey.priorRevocationSelfSig })
+    } else if (keyType === 'authorizationKey') {
+      makeZomeCall('setAuthorizer', { authorization_key_path: 1, signed_auth_key: 'how_do_we_determine_this????' })  // TODO: Review how to DETERMINE THIS....,
+    } else {
+      updateKey({
+        old_key: address,
+        signed_old_key: 'IS_THIS_THE_REV_KEY_Signature_????',
+        context: currentKey.context
+      })
+      makeZomeCall('updateKey', { old_key: address, signed_old_key: 'IS_THIS_THE_REV_KEY_Signature_????', context: currentKey.context })
+    }
+  }
+
+  const deleteCurrentKey = () => {
+    if (keyType === 'revocationKey') {
+      console.log('Trying to delete a revocation key. This is not possible. Please update/replace key instead.')
+    } else if (keyType === 'authorizationKey') {
+      console.log('Trying to delete a authorization key. This is not possible. Please update/replace key instead.')
+    } else {
+      makeZomeCall('deleteKey', { old_key: address, signed_old_key: 'IS_THIS_THE_REV_KEY_Signature_????' })
+    }
+  }
+
   return (
 		<Card className={classes.card}>
 			<CardHeader
-				subheader={`Key: ${address}`}
+        title={`${displayProp(keyType)}`}
+        titleTypographyProps={{ variant: 'h6' }}
+        subheader={`${address}`}
+        subheaderTypographyProps={{ variant: 'body2' }}
 			/>
 			<hr style={{ margin: '5px auto', width: '95%' }}/>
 			<CardActions className={classes.actions} disableActionSpacing={true}>
-				<Button size='small' color='primary' onClick={() => console.log('PLUG IN the fn to RECYCLE keys.  Key to recycle : ', address)}>
+				<Button size='small' color='primary' onClick={(updateCurrentKey)}>
 					<Autorenew/>
-					Recycle
+					Replace
 				</Button>
-				<Button size='small' color='primary' onClick={() => console.log('PLUG IN the fn to DELETE keys.  Key to delete : ', address)}>
+				<Button size='small' color='primary' onClick={deleteCurrentKey}>
 					<DeleteForever/>
 					Delete
 				</Button>
